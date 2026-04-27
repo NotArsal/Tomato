@@ -4,9 +4,15 @@ let serviceAccount;
 
 if (process.env.FIREBASE_SERVICE_ACCOUNT) {
   try {
-    serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+    let rawJson = process.env.FIREBASE_SERVICE_ACCOUNT.trim();
+    // Remove potential outer quotes if they exist (common issue in some env setups)
+    if (rawJson.startsWith('"') && rawJson.endsWith('"')) {
+      rawJson = rawJson.substring(1, rawJson.length - 1);
+    }
+    serviceAccount = JSON.parse(rawJson);
   } catch (error) {
     console.error('Failed to parse FIREBASE_SERVICE_ACCOUNT:', error.message);
+    console.error('Raw string length:', process.env.FIREBASE_SERVICE_ACCOUNT?.length);
   }
 } else {
   try {

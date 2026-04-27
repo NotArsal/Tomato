@@ -10,7 +10,7 @@ const GOOGLE_MAPS_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 const MAP_ID = import.meta.env.VITE_MAP_ID || 'DEMO_MAP_ID';
 
 const containerStyle = { width: '100%', height: '100%' };
-const defaultCenter = { lat: 12.9716, lng: 77.5946 };
+const defaultCenter = { lat: 18.5204, lng: 73.8567 }; // Pune, Maharashtra
 
 const LiveMap = ({
   driverLocation,

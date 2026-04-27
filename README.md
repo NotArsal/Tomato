@@ -16,6 +16,12 @@ Tomato is a modern, high-performance food delivery platform built with the MERN 
 - **Backend**: Node.js, Express, MongoDB (Mongoose), Socket.io, Firebase Admin SDK.
 - **Hosting**: Vercel (Frontend), Render (Backend).
 
+## 📍 Pune Specialization
+This app is optimized for **Pune, Maharashtra**. It includes:
+- **Geo-spatial Discovery**: Restaurants are sorted by distance from your current Pune location.
+- **Pune Landmarks**: Seed data includes real-world spots like Viman Nagar, FC Road, and Hinjewadi.
+- **Local Menus**: Featuring Misal Pav, Keema Pav, and authentic Puran Poli.
+
 ## 📦 Installation & Setup
 
 ### 1. Clone the Repository
@@ -29,17 +35,24 @@ cd Tomato
 cd backend
 npm install
 ```
-Create a `.env` file in the `backend` folder:
+Create a `.env` file in the root folder (for Vite) and `backend` folder (for server):
 ```env
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 PORT=5001
+VITE_GOOGLE_MAPS_API_KEY=your_key
+VITE_MAP_ID=your_map_id
 ```
 
-### 3. Frontend Setup
+### 3. Seed Pune Data
+To populate the database with authentic Pune restaurant data:
 ```bash
-# Return to root
-cd ..
+node backend/seedPune.js
+```
+
+### 4. Frontend Setup
+```bash
+# From root directory
 npm install
 npm run dev
 ```
@@ -47,26 +60,23 @@ npm run dev
 ## 🌐 Hosting Configuration
 
 ### Render (Backend)
-1. **Root Directory**: `backend`
-2. **Build Command**: `npm install`
-3. **Start Command**: `node server.js`
-4. **Environment Variables**:
+1. **Build Command**: `npm install`
+2. **Start Command**: `node server.js`
+3. **Environment Variables**:
    - `MONGO_URI`: Your MongoDB string.
    - `JWT_SECRET`: Your secret key.
-   - `FIREBASE_SERVICE_ACCOUNT`: The full JSON string from your `serviceAccountKey.json`.
-   - `CLIENT_URL`: Your hosted frontend URL.
+   - `FIREBASE_SERVICE_ACCOUNT`: The full JSON string from your `serviceAccountKey.json`. (Ensure it's a valid JSON string without extra quotes).
 
 ### Vercel (Frontend)
 1. **Framework Preset**: `Vite`
 2. **Build Command**: `npm run build`
 3. **Output Directory**: `dist`
 4. **Environment Variables**:
-   - `VITE_API_URL`: Your hosted backend URL (e.g., `https://api.example.com/api`).
-   - `VITE_SOCKET_URL`: Your hosted backend URL.
+   - `VITE_API_URL`: Your hosted backend URL.
+   - `VITE_GOOGLE_MAPS_API_KEY`: Your Google Maps key.
 
 ## 📄 License
-
 This project is licensed under the MIT License.
 
 ---
-Built with ❤️ by [Arsal](https://github.com/NotArsal)
+Built with ❤️ by [Arsal](https://github.com/NotArsal) in Pune.
