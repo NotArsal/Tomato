@@ -49,7 +49,7 @@ const orderSchema = new mongoose.Schema({
     },
     coordinates: {
       type: [Number],
-      default: [77.5946, 12.9716]
+      default: [73.8567, 18.5204]
     }
   },
   customerLocation: {
@@ -60,7 +60,7 @@ const orderSchema = new mongoose.Schema({
     },
     coordinates: {
       type: [Number],
-      default: [77.5946, 12.9716]
+      default: [73.8567, 18.5204]
     }
   },
   restaurantLocation: {
@@ -71,7 +71,7 @@ const orderSchema = new mongoose.Schema({
     },
     coordinates: {
       type: [Number],
-      default: [77.5946, 12.9716]
+      default: [73.8567, 18.5204]
     }
   }
 }, { timestamps: true });

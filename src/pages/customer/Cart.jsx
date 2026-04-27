@@ -20,13 +20,13 @@ const Cart = () => {
     flat: '',
     landmark: '',
     area: '',
-    city: 'Bangalore',
+    city: 'Pune',
     pincode: ''
   });
 
   const savedAddresses = [
-    { id: 1, label: 'Home', full: 'Flat 402, Sunshine Apts, Koramangala, Bangalore - 560034' },
-    { id: 2, label: 'Office', full: 'Level 5, WeWork Galaxy, Residency Rd, Bangalore - 560025' }
+    { id: 1, label: 'Home', full: 'Flat 402, Millennium Star, Sassoon Road, Pune - 411001' },
+    { id: 2, label: 'Office', full: 'Unit 5, Cerebrum IT Park, Kalyani Nagar, Pune - 411014' }
   ];
 
   useEffect(() => {
@@ -80,7 +80,7 @@ const Cart = () => {
               setAddress(prev => ({
                 ...prev,
                 area: data.address.suburb || data.address.neighbourhood || '',
-                city: data.address.city || data.address.town || 'Bangalore',
+                city: data.address.city || data.address.town || 'Pune',
                 pincode: data.address.postcode || ''
               }));
             }
