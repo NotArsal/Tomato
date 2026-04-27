@@ -18,9 +18,9 @@ Tomato is a modern, high-performance food delivery platform built with the MERN 
 
 ## 📍 Pune Specialization
 This app is optimized for **Pune, Maharashtra**. It includes:
-- **Geo-spatial Discovery**: Restaurants are sorted by distance from your current Pune location.
-- **Pune Landmarks**: Seed data includes real-world spots like Viman Nagar, FC Road, and Hinjewadi.
-- **Local Menus**: Featuring Misal Pav, Keema Pav, and authentic Puran Poli.
+- **Geo-spatial Discovery**: 15+ real-world restaurants sorted by distance from your current Pune location.
+- **Pune Landmarks**: Seed data includes iconic spots like Vaishali (FC Road), Sujata Mastani, and German Bakery.
+- **Local Menus**: Featuring Misal Pav, Mastani, Keema Pav, and authentic Puran Poli Thali.
 
 ## 📦 Installation & Setup
 
