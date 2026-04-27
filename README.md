@@ -45,10 +45,17 @@ VITE_MAP_ID=your_map_id
 ```
 
 ### 3. Seed Pune Data
-To populate the database with authentic Pune restaurant data:
+To populate the database with authentic Pune restaurant data and test users:
 ```bash
-node backend/seedPune.js
+node backend/seed.js
 ```
+
+#### 🔑 Test Credentials
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **Customer** | `antigravity@test.com` | `password123` |
+| **Restaurant** | `puneadmin@tomato.com` | `password123` |
+| **Delivery** | `driver@test.com` | `password123` |
 
 ### 4. Frontend Setup
 ```bash
