@@ -51,11 +51,22 @@ node backend/seed.js
 ```
 
 #### 🔑 Test Credentials
-| Role | Email | Password |
+All accounts use the same password: **`password123`**
+
+| Role | Email | Description |
 | :--- | :--- | :--- |
-| **Customer** | `antigravity@test.com` | `password123` |
-| **Restaurant** | `puneadmin@tomato.com` | `password123` |
-| **Delivery** | `driver@test.com` | `password123` |
+| **Customer** | `antigravity@test.com` | Shaikh Ahmed (Pune) |
+| **Restaurant** | `vohuman@tomato.com` | Vohuman Cafe Manager |
+| **Restaurant** | `vaishali@tomato.com` | Vaishali Manager |
+| **Restaurant** | `goodluck@tomato.com` | Goodluck Cafe Manager |
+| **Restaurant** | `leplaisir@tomato.com` | Le Plaisir Manager |
+| **Restaurant** | `sujata@tomato.com` | Sujata Mastani Manager |
+| **Restaurant** | `...` | *Use `[name]@tomato.com` for others* |
+| **Delivery** | `driver1@test.com` | Pune Delivery Partner 1 |
+| **Delivery** | `driver2@test.com` | Pune Delivery Partner 2 |
+| **Delivery** | `driver3@test.com` | Pune Delivery Partner 3 |
+
+*Note: There are 15 unique restaurant accounts. Use the restaurant name (lowercase, no spaces) followed by `@tomato.com` to log in as any manager.*
 
 ### 4. Frontend Setup
 ```bash
