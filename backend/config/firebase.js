@@ -5,14 +5,20 @@ let serviceAccount;
 if (process.env.FIREBASE_SERVICE_ACCOUNT) {
   try {
     let rawJson = process.env.FIREBASE_SERVICE_ACCOUNT.trim();
-    // Remove potential outer quotes if they exist (common issue in some env setups)
+    
+    // Remove potential outer quotes if they exist
     if (rawJson.startsWith('"') && rawJson.endsWith('"')) {
       rawJson = rawJson.substring(1, rawJson.length - 1);
     }
+    
+    // Fix common copy-paste error: missing opening/closing braces
+    if (!rawJson.startsWith('{')) rawJson = '{' + rawJson;
+    if (!rawJson.endsWith('}')) rawJson = rawJson + '}';
+    
     serviceAccount = JSON.parse(rawJson);
   } catch (error) {
     console.error('Failed to parse FIREBASE_SERVICE_ACCOUNT:', error.message);
-    console.error('Raw string length:', process.env.FIREBASE_SERVICE_ACCOUNT?.length);
+    console.error('Raw string snippet:', process.env.FIREBASE_SERVICE_ACCOUNT?.substring(0, 50));
   }
 } else {
   try {
