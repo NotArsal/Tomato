@@ -26,21 +26,9 @@ const Login = () => {
     setLoading(false);
   };
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleLogin = () => {
     setError('');
-    setLoading(true);
-    try {
-      const result = await loginWithGoogle();
-      if (result.needsRole) {
-        // New user via Google — redirect to signup to pick role
-        navigate('/signup', { state: { firebaseToken: result.firebaseToken, name: result.name, email: result.email } });
-      } else {
-        navigate(dashboardMap[result.role] || '/');
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || err.message || 'Google login failed');
-    }
-    setLoading(false);
+    loginWithGoogle();
   };
 
   return (

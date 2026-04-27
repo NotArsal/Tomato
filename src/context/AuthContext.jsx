@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { signInWithPopup, signOut as firebaseSignOut } from 'firebase/auth';
+import { signInWithRedirect, getRedirectResult, signOut as firebaseSignOut } from 'firebase/auth';
 import { auth, googleProvider } from '../config/firebase';
 import api from '../utils/api';
 
@@ -11,13 +11,40 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Check for redirect result on mount
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('user');
-    if (token && userData) {
-      setUser(JSON.parse(userData));
-    }
-    setLoading(false);
+    const checkRedirect = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+          const firebaseToken = await result.user.getIdToken();
+          const { data } = await api.post('/auth/firebase', { firebaseToken });
+          
+          if (!data.needsRole) {
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data));
+            setUser(data);
+          } else {
+            // New user via Google - redirect to signup to pick role
+            sessionStorage.setItem('pending_google_auth', JSON.stringify({
+              firebaseToken, name: data.name, email: data.email
+            }));
+            window.location.href = '/signup';
+          }
+        }
+      } catch (error) {
+        console.error('Redirect auth error:', error);
+      }
+
+      const token = localStorage.getItem('token');
+      const userData = localStorage.getItem('user');
+      if (token && userData) {
+        setUser(JSON.parse(userData));
+      }
+      setLoading(false);
+    };
+
+    checkRedirect();
   }, []);
 
   // Email/Password login
@@ -38,25 +65,12 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
-  // Google Sign-In via Firebase
-  const loginWithGoogle = async (role = null) => {
-    const result = await signInWithPopup(auth, googleProvider);
-    const firebaseToken = await result.user.getIdToken();
-
-    const { data } = await api.post('/auth/firebase', { firebaseToken, role });
-
-    // If the backend asks for a role (new user), return that info
-    if (data.needsRole) {
-      return { needsRole: true, email: data.email, name: data.name, firebaseToken };
-    }
-
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify(data));
-    setUser(data);
-    return data;
+  // Google Sign-In via Redirect (Fixes popup-blocked errors)
+  const loginWithGoogle = () => {
+    signInWithRedirect(auth, googleProvider);
   };
 
-  // Complete Google signup with role selection (for new users)
+  // Complete Google signup with role selection
   const completeGoogleSignup = async (firebaseToken, role) => {
     const { data } = await api.post('/auth/firebase', { firebaseToken, role });
     localStorage.setItem('token', data.token);

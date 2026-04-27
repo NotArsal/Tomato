@@ -5,7 +5,15 @@ import './Auth.css';
 
 const Signup = () => {
   const location = useLocation();
-  const googleData = location.state || {};
+  const navigate = useNavigate();
+  const { signup, loginWithGoogle, completeGoogleSignup } = useAuth();
+
+  // Try to get Google data from location state OR sessionStorage (from redirect)
+  const [googleData, setGoogleData] = useState(() => {
+    const fromState = location.state;
+    const fromSession = JSON.parse(sessionStorage.getItem('pending_google_auth') || 'null');
+    return fromState || fromSession || {};
+  });
 
   const [name, setName] = useState(googleData.name || '');
   const [email, setEmail] = useState(googleData.email || '');
@@ -15,8 +23,6 @@ const Signup = () => {
   const [address, setAddress] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signup, loginWithGoogle, completeGoogleSignup } = useAuth();
-  const navigate = useNavigate();
 
   const isGoogleFlow = !!googleData.firebaseToken;
 
@@ -39,8 +45,8 @@ const Signup = () => {
     try {
       let user;
       if (isGoogleFlow) {
-        // Complete Google signup with selected role
         user = await completeGoogleSignup(googleData.firebaseToken, role);
+        sessionStorage.removeItem('pending_google_auth');
       } else {
         user = await signup(name, email, password, role, phone, address);
       }
@@ -51,26 +57,8 @@ const Signup = () => {
     setLoading(false);
   };
 
-  const handleGoogleSignup = async () => {
-    if (!role) {
-      setError('Please select a role first');
-      return;
-    }
-    setError('');
-    setLoading(true);
-    try {
-      const result = await loginWithGoogle(role);
-      if (result.needsRole) {
-        // Already on signup — complete with selected role
-        const user = await completeGoogleSignup(result.firebaseToken, role);
-        navigate(dashboardMap[user.role] || '/');
-      } else {
-        navigate(dashboardMap[result.role] || '/');
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || err.message || 'Google signup failed');
-    }
-    setLoading(false);
+  const handleGoogleSignup = () => {
+    loginWithGoogle();
   };
 
   return (

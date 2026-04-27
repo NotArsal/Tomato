@@ -4,27 +4,14 @@ const MenuItem = require('../models/MenuItem');
 const { protect, requireRole } = require('../middleware/auth');
 const router = express.Router();
 
-// GET /api/restaurants - List all restaurants
+// GET /api/restaurants - List all restaurants (with optional geo-filtering)
 router.get('/', async (req, res) => {
   try {
-    const restaurants = await Restaurant.find().populate('owner', 'name email');
-    res.json(restaurants);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// GET /api/restaurants/nearby - Find restaurants within 10km
-router.get('/nearby', async (req, res) => {
-  try {
     const { lat, lng } = req.query;
+    let query = {};
 
-    if (!lat || !lng) {
-      return res.status(400).json({ message: 'Latitude and Longitude are required' });
-    }
-
-    const restaurants = await Restaurant.find({
-      location: {
+    if (lat && lng) {
+      query.location = {
         $near: {
           $geometry: {
             type: 'Point',
@@ -32,9 +19,10 @@ router.get('/nearby', async (req, res) => {
           },
           $maxDistance: 10000 // 10km in meters
         }
-      }
-    }).populate('owner', 'name email');
+      };
+    }
 
+    const restaurants = await Restaurant.find(query).populate('owner', 'name email');
     res.json(restaurants);
   } catch (error) {
     res.status(500).json({ message: error.message });

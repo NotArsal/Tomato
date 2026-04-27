@@ -45,7 +45,7 @@ const CustomerDashboard = () => {
     try {
       let url = '/restaurants';
       if (coords) {
-        url = `/restaurants/nearby?lat=${coords.lat}&lng=${coords.lng}`;
+        url = `/restaurants?lat=${coords.lat}&lng=${coords.lng}`;
       }
       const { data } = await api.get(url);
       setRestaurants(data);
