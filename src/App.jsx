@@ -18,6 +18,7 @@ import Signup from './pages/Signup';
 // Dashboard Pages
 import CustomerDashboard from './pages/customer/CustomerDashboard';
 import RestaurantPage from './pages/customer/RestaurantPage';
+import Cart from './pages/customer/Cart';
 import OrderTracking from './pages/customer/OrderTracking';
 import OwnerDashboard from './pages/restaurant/OwnerDashboard';
 import DriverDashboard from './pages/delivery/DriverDashboard';
@@ -53,6 +54,11 @@ function App() {
             <Route path="/customer/restaurant/:id" element={
               <ProtectedRoute roles={['customer']}>
                 <RestaurantPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/customer/cart" element={
+              <ProtectedRoute roles={['customer']}>
+                <Cart />
               </ProtectedRoute>
             } />
             <Route path="/customer/track/:orderId" element={

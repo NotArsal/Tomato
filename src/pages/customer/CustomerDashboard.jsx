@@ -12,14 +12,42 @@ const CustomerDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [tab, setTab] = useState('restaurants');
 
+  const [location, setLocation] = useState(null);
+  const [locationStatus, setLocationStatus] = useState('detecting'); // 'detecting', 'granted', 'denied'
+
   useEffect(() => {
-    fetchRestaurants();
+    getUserLocation();
     fetchOrders();
   }, []);
 
-  const fetchRestaurants = async () => {
+  const getUserLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationStatus('denied');
+      fetchRestaurants();
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        setLocation(coords);
+        setLocationStatus('granted');
+        fetchRestaurants(coords);
+      },
+      (err) => {
+        setLocationStatus('denied');
+        fetchRestaurants();
+      }
+    );
+  };
+
+  const fetchRestaurants = async (coords = null) => {
     try {
-      const { data } = await api.get('/restaurants');
+      let url = '/restaurants';
+      if (coords) {
+        url = `/restaurants/nearby?lat=${coords.lat}&lng=${coords.lng}`;
+      }
+      const { data } = await api.get(url);
       setRestaurants(data);
     } catch (err) { console.error(err); }
   };
@@ -60,13 +88,21 @@ const CustomerDashboard = () => {
         </div>
 
         {/* Tabs */}
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '24px' }}>
-          <button className={`filter-btn ${tab === 'restaurants' ? 'active' : ''}`} onClick={() => setTab('restaurants')} style={tab === 'restaurants' ? { background: 'var(--color-primary)', color: 'white', border: 'none' } : {}}>
-            Browse Restaurants
-          </button>
-          <button className={`filter-btn ${tab === 'orders' ? 'active' : ''}`} onClick={() => setTab('orders')} style={tab === 'orders' ? { background: 'var(--color-primary)', color: 'white', border: 'none' } : {}}>
-            My Orders
-          </button>
+        <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <button className={`filter-btn ${tab === 'restaurants' ? 'active' : ''}`} onClick={() => setTab('restaurants')} style={tab === 'restaurants' ? { background: 'var(--color-primary)', color: 'white', border: 'none' } : {}}>
+              Browse Restaurants
+            </button>
+            <button className={`filter-btn ${tab === 'orders' ? 'active' : ''}`} onClick={() => setTab('orders')} style={tab === 'orders' ? { background: 'var(--color-primary)', color: 'white', border: 'none' } : {}}>
+              My Orders
+            </button>
+          </div>
+
+          <div className="location-status-tag">
+            {locationStatus === 'granted' && <span className="granted">📍 Restaurants near you (10km)</span>}
+            {locationStatus === 'denied' && <span className="denied">⚠️ Location denied. Showing all restaurants.</span>}
+            {locationStatus === 'detecting' && <span className="detecting">🔍 Detecting location...</span>}
+          </div>
         </div>
 
         {tab === 'restaurants' && (

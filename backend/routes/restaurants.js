@@ -14,6 +14,33 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET /api/restaurants/nearby - Find restaurants within 10km
+router.get('/nearby', async (req, res) => {
+  try {
+    const { lat, lng } = req.query;
+
+    if (!lat || !lng) {
+      return res.status(400).json({ message: 'Latitude and Longitude are required' });
+    }
+
+    const restaurants = await Restaurant.find({
+      location: {
+        $near: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [parseFloat(lng), parseFloat(lat)]
+          },
+          $maxDistance: 10000 // 10km in meters
+        }
+      }
+    }).populate('owner', 'name email');
+
+    res.json(restaurants);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // GET /api/restaurants/my - Get current owner's restaurant
 router.get('/my', protect, requireRole('restaurant'), async (req, res) => {
   try {
