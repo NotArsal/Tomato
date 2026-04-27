@@ -247,11 +247,10 @@ const seedDB = async () => {
     let owner = await User.findOne({ role: 'restaurant' });
     if (!owner) {
       console.log('Creating a default restaurant owner user...');
-      const hashedPassword = await bcrypt.hash('password123', 10);
       owner = await User.create({
         name: 'Pune Admin',
         email: 'puneadmin@tomato.com',
-        password: hashedPassword,
+        password: 'password123',
         role: 'restaurant',
         phone: '9876543210',
         address: 'MG Road, Pune'

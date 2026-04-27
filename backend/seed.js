@@ -18,14 +18,11 @@ const seedData = async () => {
     }
     console.log('🗑️  Cleared existing data');
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash('password123', salt);
-
     // ---- Create Users ----
     const customer = await User.create({
       name: 'Shaikh Ahmed',
       email: 'antigravity@test.com',
-      password: hashedPassword,
+      password: 'password123',
       role: 'customer',
       phone: '+91 99999 00000',
       address: 'Vishwakarma Institute of Technology, Pune'
@@ -34,7 +31,7 @@ const seedData = async () => {
     const owner = await User.create({
       name: 'Pune Admin',
       email: 'puneadmin@tomato.com',
-      password: hashedPassword,
+      password: 'password123',
       role: 'restaurant',
       phone: '9876543210'
     });
@@ -42,7 +39,7 @@ const seedData = async () => {
     const driver = await User.create({
       name: 'Delivery Partner',
       email: 'driver@test.com',
-      password: hashedPassword,
+      password: 'password123',
       role: 'delivery',
       phone: '+91 88888 00000'
     });
